@@ -9,5 +9,5 @@
   - name: Install mongodb
     ansible.builtin.yum:
       name: mongodb-org -y
-      syaye: installed
+      state: installed
   
