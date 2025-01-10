@@ -73,9 +73,7 @@
       state: installed
 
   - name: Load catalogue Schema
-    ansible.builtin.command: mongo --host mongodb.joindevops.shop </app/schema/catalogue.js
-    remote_src: yes
-
+    ansible.builtin.command: mongo --host mongodb.joindevops.shop < /app/schema/catalogue.js
 
 
   - name: Start the catalogue
