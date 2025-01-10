@@ -27,8 +27,8 @@
       path: /app
     register: directory # we run the above command and output will stored inside this "directory" variable
 
+  - name: print the directory stat
     ansible.builtin.debug:
-      name: print the directory stat
       msg: output {{directory}}
 
   - when: directory.stat.exists  == false 
