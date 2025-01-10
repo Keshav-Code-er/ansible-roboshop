@@ -4,9 +4,27 @@
   tasks:
   - name: NPM source
     ansible.builtin.shell: dnf module disable nodejs -y ; dnf module enable nodejs:18 -y
+
   - name: Install Node.Js
     ansible.builtin.yum:
       name: nodejs
-      state: installed 
+      state: installed
+
+  - name: check user exits or not
+    ansible.builtin.command: id roboshop
+    register: out  #out is variable name
+    ignore_errors: true
+
+  - name: create user roboshop
+    become: yes #we need sudo access for this task only
+    ansible.builtin.user:
+      name: roboshop
+    when: out.rc != 0
+
+    # check the exist or not
+  - name: check /app directory exist or not
+    ansible.builtin.stat:
+      path: /app
+    register: directory # we run the above command and output will stored inside this "directory" variable
 
 
