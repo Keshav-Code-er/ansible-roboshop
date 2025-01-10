@@ -1,0 +1,7 @@
+- name: install catalogue
+  hosts: catalogue
+  become: yes
+  tasks:
+  - name: NPM source
+  ansible.builtin.shell: curl -o /tmp/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip
+
