@@ -3,5 +3,10 @@
   become: yes
   tasks:
   - name: NPM source
-    ansible.builtin.shell: "curl -o /tmp/catalogue.zip https://roboshop-builds.s3.amazonaws.com/catalogue.zip"
+    ansible.builtin.shell: dnf module disable nodejs -y ; dnf module enable nodejs:18 -y
+  - name: Install Node.Js
+    ansible.builtin.yum:
+      name: nodejs
+      state: installed 
+
 
