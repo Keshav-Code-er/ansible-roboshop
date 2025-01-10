@@ -15,11 +15,11 @@
     register: out  #out is variable name
     ignore_errors: true
 
-  - name: create user roboshop
+  - when: out.rc != 0
+    name: create user roboshop
     become: yes #we need sudo access for this task only
     ansible.builtin.user:
       name: roboshop
-    when: out.rc != 0
 
     # check the exist or not
   - name: check /app directory exist or not
