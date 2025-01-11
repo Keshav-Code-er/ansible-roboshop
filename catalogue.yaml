@@ -72,13 +72,13 @@
       name: mongodb-org-shell
       state: installed
 
-  - name: Load user Schema
+  - name: Load catalogue Schema
     ansible.builtin.command: mongo --host mongodb.joindevops.shop < /app/schema/catalogue.js
 
 
-  - name: Start the user
+  - name: Start the catalogue
     ansible.builtin.service:
-      name: user
+      name: catalogue
       state: started
       enabled: yes
         
