@@ -6,3 +6,12 @@ catalogue.joindevops.shop
 
 [web]
 web.joindevops.shop
+
+[redis]
+redis.joindevops.shop
+
+[cart]
+cart.joindevops.shop
+
+[user]
+user.joindevops.shop
