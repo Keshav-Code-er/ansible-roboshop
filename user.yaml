@@ -1,5 +1,5 @@
-- name: install catalogue
-  hosts: catalogue
+- name: install user
+  hosts: user
   become: yes
   tasks:
   - name: NPM source
@@ -21,7 +21,7 @@
     ansible.builtin.user:
       name: roboshop
 
-    # check the exist or not
+  - # check the exist or not
   - name: check /app directory exist or not
     ansible.builtin.stat:
       path: /app
@@ -37,26 +37,26 @@
       path: /app
       state: directory
 
-  - name: Download the catalogue Artifact
+  - name: Download the user Artifact
     ansible.builtin.get_url:
-      url:  https://roboshop-builds.s3.amazonaws.com/catalogue.zip
+      url:  https://roboshop-builds.s3.amazonaws.com/user.zip
       dest: /tmp
-      
-  - name: extract catalogue Artifact
+
+  - name: extract user Artifact
     ansible.builtin.unarchive:
-      src: /tmp/catalogue.zip      
+      src: /tmp/user.zip     
       dest: /app
       remote_src: yes
 
-  - name: Install the dependencies.
+  - name: Install the dependencies
     ansible.builtin.command: npm install 
     args:
       chdir: /app
 
-  - name: copy catalogue service
+  - name: copy User Service
     ansible.builtin.copy:
-      src: catalogue.service
-      dest: /etc/systemd/system/catalogue.service
+      src: user.service
+      dest: /etc/systemd/system/user.service
 
   - name: reload the service
     ansible.builtin.systemd_service:
@@ -69,11 +69,11 @@
 
   - name: install mongodb-client
     ansible.builtin.yum:
-      name: mongodb-org-shell
+      name: mongodb-mongosh
       state: installed
 
   - name: Load user Schema
-    ansible.builtin.command: mongo --host mongodb.joindevops.shop < /app/schema/catalogue.js
+    ansible.builtin.command: mongo --host mongodb.joindevops.shop < /app/schema/user.js
 
 
   - name: Start the user
@@ -81,4 +81,5 @@
       name: user
       state: started
       enabled: yes
-        
+
+ 
