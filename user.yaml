@@ -73,7 +73,7 @@
       state: installed
 
   - name: Load user Schema
-    ansible.builtin.command: mongo --host mongodb.joindevops.shop < /app/schema/user.js
+    ansible.builtin.command: mongo --host mongodb.joindevops.shop </app/schema/user.js
 
 
   - name: Start the user
