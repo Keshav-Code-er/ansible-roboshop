@@ -13,9 +13,6 @@
       state: started
       enabled: yes
 
-  - name: Access the web service
-    ansible.builtin.command: http://35.171.163.102:80
-
   - name: Remove html directory
     ansible.builtin.file:
       path: /usr/share/nginx/html/*
