@@ -64,7 +64,7 @@
     ansible.builtin.service:
       name: shipping
       state: restarted
-      enable: yes
+      enabled: yes
 
   - name: install mysql
     ansible.builtin.yum:
