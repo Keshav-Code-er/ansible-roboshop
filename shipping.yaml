@@ -48,12 +48,12 @@
       remote_src: yes
 
   - name: Install the dependencies(maven package)
-    ansible.builtin.command: mvn clean package
+    ansible.builtin.shell: mvn clean package
     args:
       chdir: /app
 
   - name: rename jar file
-    ansible.builtin.command: mv target/shipping-1.0.jar shipping.jar
+    ansible.builtin.shell: mv target/shipping-1.0.jar shipping.jar
     args:
       chdir: /app
 
@@ -79,7 +79,7 @@
       state: installed
 
   - name: Load mysql Schema
-    ansible.builtin.command: mysql -h mysql.joindevops.shop -uroot -pDevshop@1 < /app/schema/shipping.sql 
+    ansible.builtin.shell: mysql -h mysql.joindevops.shop -uroot -pDevshop@1 < /app/schema/shipping.sql 
 
 
   - name: Start the shipping
