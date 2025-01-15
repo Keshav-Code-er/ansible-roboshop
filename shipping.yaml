@@ -69,7 +69,7 @@
   - name: restart shipping
     ansible.builtin.service:
      name: shipping
-     state: restarted
+     state: started
      enabled: true
 
 
@@ -79,13 +79,13 @@
       state: installed
 
   - name: Load mysql Schema
-    ansible.builtin.shell: mysql --h mysql.joindevops.shop -uroot -pDevops@1 < /app/schema/shipping.sql 
+    ansible.builtin.shell: mysql -h mysql.joindevops.shop -uroot -pDevops@1 < /app/schema/shipping.sql 
 
 
   - name: Start the shipping
     ansible.builtin.service:
       name: shipping
-      state: started
+      state: restarted
       
 
 
