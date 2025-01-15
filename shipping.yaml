@@ -56,15 +56,10 @@
       src: shipping.service
       dest: /etc/systemd/system/shipping.service
 
-  - name: reload the service
+  - name: daemon_reload
     ansible.builtin.systemd_service:
       daemon_reload: true
 
-  - name: Start the shipping
-    ansible.builtin.service:
-      name: shipping
-      state: restarted
-      enabled: yes
 
   - name: install mysql
     ansible.builtin.yum:
