@@ -83,7 +83,7 @@
     register: schema
 
   - name: Load mysql Schema
-    ansible.builtin.shell: mysql -h mysql.joindevops.shop -uroot -pDevshop@1 < /app/schema/shipping.sql 
+    ansible.builtin.shell: mysql --h mysql.joindevops.shop -uroot -pDevshop@1 < /app/schema/shipping.sql 
 
 
   - name: Start the shipping
