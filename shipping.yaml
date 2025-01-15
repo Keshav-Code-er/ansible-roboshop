@@ -63,7 +63,7 @@
   - name: Start the shipping
     ansible.builtin.service:
       name: shipping
-      state: started
+      state: restarted
       enable: yes
 
   - name: install mysql
