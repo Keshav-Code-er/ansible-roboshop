@@ -1,40 +1,53 @@
-- name: install shipping component
+- name: Install Shipping Component
   hosts: shipping
   become: yes
-  vars:
-    mysql_password: Devops@1
   tasks:
-  - name: install maven
-    ansible.builtin.dnf:
+  - name: Install Maven
+    ansible.builtin.yum:
       name: maven
-      state: present
+      state: installed
 
-  - name: create roboshop user
+  - name: check user exits or not
+    ansible.builtin.command: id roboshop
+    register: out  #out is variable name
+    ignore_errors: true
+
+  - when: out.rc != 0
+    name: create user roboshop
+    become: yes #we need sudo access for this task only
     ansible.builtin.user:
       name: roboshop
 
-  - name: Recursively remove app directory
-    ansible.builtin.file:
+    # check the exist or not
+  - name: check /app directory exist or not
+    ansible.builtin.stat:
       path: /app
-      state: absent
+    register: directory # we run the above command and output will stored inside this "directory" variable
 
-  - name: create app directory
+  - when: directory.stat.exists == False 
+    name: create /app directory 
     ansible.builtin.file:
       path: /app
       state: directory
 
-  - name: download shipping application
-    ansible.builtin.get_url:
-      url: https://roboshop-builds.s3.amazonaws.com/shipping.zip
-      dest: /tmp
+  # - name: Download the shipping Artifact
+  #   ansible.builtin.get_url:
+  #     url:  https://roboshop-builds.s3.amazonaws.com/shipping.zip
+  #     dest: /tmp
+      
+  # - name: extract shipping Artifact
+  #   ansible.builtin.unarchive:
+  #     src: /tmp/shipping.zip   
+  #     dest: /app
+  #     remote_src: yes
 
-  - name: extract shipping application
+  - name: Download and Extract the shipping artifact
     ansible.builtin.unarchive:
-      src: /tmp/shipping.zip
+      src: https://roboshop-builds.s3.amazonaws.com/shipping.zip
       dest: /app
       remote_src: yes
 
-  - name: install dependencies
+  - name: Install the dependencies(maven package)
     ansible.builtin.command: mvn clean package
     args:
       chdir: /app
@@ -49,29 +62,28 @@
       src: shipping.service
       dest: /etc/systemd/system/shipping.service
 
-  - name: deamon realod and start
-    ansible.builtin.systemd_service:
+  - name: daemon_reload
+    ansible.builtin.systemd:
       daemon_reload: true
 
   - name: install mysql client
-    ansible.builtin.dnf:
+    ansible.builtin.yum:
       name: mysql
-      state: present
+      state: installed
 
-  - name: check cities schema exists or not
-    ansible.builtin.command:  mysql -h mysql.joindevops.shop -uroot -p{{mysql_password}} -sN -e "SELECT COUNT(*) FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = 'cities'"
-    register: schema
 
-  - name: print output
-    ansible.builtin.debug:
-      msg: "schema output: {{schema}}"
+  - name: Load mysql Schema
+    ansible.builtin.shell: mysql --host mysql.joindevops.shop -uroot -pDevops@1 < /app/schema/shipping.sql 
 
-  - name: load cities data
-    ansible.builtin.shell: "mysql -h mysql.joindevops.shop -uroot -p{{mysql_password}}  < /app/schema/shipping.sql"
-    when: schema.stdout != "1"
-
-  - name: start and enable shipping
+  - name: restart shipping
     ansible.builtin.service:
-      name: shipping
-      state: restarted
-      enabled: yes
+     name: shipping
+     state: restarted
+     enabled: true
+
+      
+
+
+
+
+
