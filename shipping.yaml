@@ -30,14 +30,20 @@
       path: /app
       state: directory
 
-  - name: Download the shipping Artifact
-    ansible.builtin.get_url:
-      url:  https://roboshop-builds.s3.amazonaws.com/shipping.zip
-      dest: /tmp
+  # - name: Download the shipping Artifact
+  #   ansible.builtin.get_url:
+  #     url:  https://roboshop-builds.s3.amazonaws.com/shipping.zip
+  #     dest: /tmp
       
-  - name: extract shipping Artifact
+  # - name: extract shipping Artifact
+  #   ansible.builtin.unarchive:
+  #     src: /tmp/shipping.zip   
+  #     dest: /app
+  #     remote_src: yes
+
+  - name: Download and Extract the shipping artifact
     ansible.builtin.unarchive:
-      src: /tmp/shipping.zip   
+      src: https://roboshop-builds.s3.amazonaws.com/shipping.zip
       dest: /app
       remote_src: yes
 
@@ -60,13 +66,19 @@
     ansible.builtin.systemd_service:
       daemon_reload: true
 
+  - name: restart shipping
+    ansible.builtin.service:
+     name: shipping
+     state: restarted
+     enabled: true
 
-  - name: install mysql
+
+  - name: install mysql client
     ansible.builtin.yum:
       name: mysql
       state: installed
 
-  - name: Load Schema
+  - name: Load mysql Schema
     ansible.builtin.shell: mysql -h mysql.joindevops.shop -uroot -pDevshop@1 < /app/schema/shipping.sql 
 
 
