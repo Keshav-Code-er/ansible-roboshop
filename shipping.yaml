@@ -1,8 +1,6 @@
 - name: Install Shipping Component
   hosts: shipping
   become: yes
-  vars:
-    mysql_password: Devshop@1
   tasks:
   - name: Install Maven
     ansible.builtin.yum:
@@ -81,7 +79,7 @@
       state: installed
 
   - name: check cities schema exists or not
-    ansible.builtin.command:  mysql -h mysql.daws76s.online -uroot -pDevshop@1
+    ansible.builtin.command:  mysql -h mysql.joindevops.shop -uroot -pDevshop@1
     register: schema
 
   - name: Load mysql Schema
