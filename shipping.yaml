@@ -73,7 +73,7 @@
 
 
   - name: Load mysql Schema
-    ansible.builtin.shell: mysql -h mysql.joindevops.shop -uroot -pDevops@1 </app/schema/shipping.sql 
+    ansible.builtin.shell: mysql -h mysql.joindevops.shop -uroot -pDevops@1 < /app/schema/shipping.sql 
 
   - name: restart shipping
     ansible.builtin.service:
