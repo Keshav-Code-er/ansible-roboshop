@@ -1,6 +1,8 @@
 - name: Install Shipping Component
   hosts: shipping
   become: yes
+  vars:
+    mysql_password: Devshop@1
   tasks:
   - name: Install Maven
     ansible.builtin.yum:
@@ -48,12 +50,12 @@
       remote_src: yes
 
   - name: Install the dependencies(maven package)
-    ansible.builtin.shell: mvn clean package
+    ansible.builtin.command: mvn clean package
     args:
       chdir: /app
 
   - name: rename jar file
-    ansible.builtin.shell: mv target/shipping-1.0.jar shipping.jar
+    ansible.builtin.command: mv target/shipping-1.0.jar shipping.jar
     args:
       chdir: /app
 
